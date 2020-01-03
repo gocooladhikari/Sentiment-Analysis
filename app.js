@@ -15,6 +15,8 @@ var flash = require('connect-flash')
 var db = mongoose.connection
 
 var indexRouter = require('./routes/index')
+var loginRouter = require('./routes/login')
+var signinRouter = require('./routes/signin')
 
 var app = express()
 
@@ -29,6 +31,8 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
+app.use('/login', loginRouter)
+app.use('/signin', signinRouter)
 
 //Handle Sessions
 app.use(session({
