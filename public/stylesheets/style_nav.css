@@ -1,0 +1,45 @@
+Nav a {
+    color: azure;
+}
+
+
+ul li a:hover,
+.gadget-item:hover,
+.nav-search-button:hover
+.three-line-tog:hover {
+    background-color: #6c6c70;
+    color: azure;
+    border-color: #6c6c70;
+    cursor: hand;
+}
+
+
+.ourNav,
+.gadget-item,
+.three-line-tog {
+    background-color: #04032b;
+    color: aliceblue;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    padding: 0;
+    margin: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-style: none;
+}
+
+ .gadget-menu {
+    background-color: #04032b;
+    margin: 0;
+}
+
+.nav-search-button{
+    border-color: #6c6c70;
+    color: azure;
+}
+
+@media (min-width: 576px) {
+.header-hider{
+        display: none;
+    }
+}

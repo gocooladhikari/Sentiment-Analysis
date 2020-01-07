@@ -1,0 +1,55 @@
+body {
+    background-color: #d9d3f2;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.signInHeader{
+    padding: 5px;
+    margin: auto;
+}
+
+.signInCard{
+    background-color: #dfdee3;
+    border-width: 1px;
+    box-shadow: 8px 7px 3px #888888;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+}
+
+.signInImg {
+    margin: auto;
+    padding: 2rem;
+}
+
+.entryField {
+    margin: auto;
+}
+
+.signInForm {
+    width: 50%;
+    margin: auto;
+}
+
+.submitButton,
+.regOption {
+    margin-top: 0.5rem;
+}
+
+.name{
+    width: 48%;
+}
+
+@media (max-width: 576px) {
+    .signInForm {
+        width: 100%;
+        margin: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .signInForm {
+        width: 80%;
+        margin: auto;
+    }
+}
