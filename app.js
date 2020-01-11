@@ -1,75 +1,58 @@
-var createError = require('http-errors')
-var express = require('express')
-var path = require('path')
-var cookieParser = require('cookie-parser')
-var logger = require('morgan')
-var session = require('express-session')
-var passport = require('passport')
-var expressValidator = require('express-validator')
-var LocalStrategy = require('passport-local').Strategy
-var multer = require('multer') 
-var upload = multer({dest: './uploads'})
-var mongo = require('mongodb')
-var mongoose = require('mongoose')
-var flash = require('connect-flash')
-var db = mongoose.connection
+const express = require('express')
+const expressLayouts = require('express-ejs-layouts')
+const mongoose = require('mongoose')
+const passport = require('passport')
+const flash = require('connect-flash')
+const session = require('express-session')
 
-var indexRouter = require('./routes/index')
-var loginRouter = require('./routes/login')
-var signinRouter = require('./routes/signin')
 
-var app = express()
+const app = express()
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
+//DB Config
+mongoose.connect('mongodb://localhost/userDB', {useNewUrlParser: true, useUnifiedTopology: true}).then(
+  () => console.log('DB connected')
+).catch(err => console.log(err))
+
+//Express body-parser
+app.use(express.urlencoded({extended: true}))
+
+//PUblic directory setup
+app.use(express.static(__dirname + '/public'))
+
+//EJS
+app.use(expressLayouts)
 app.set('view engine', 'ejs')
- 
- app.use(logger('dev'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/', indexRouter)
-app.use('/login', loginRouter)
-app.use('/signin', signinRouter)
+//Express sessions
+app.use(
+  session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+  })
+)
 
-//Handle Sessions
-app.use(session({
-  secret: 'secret',
-  saveUninitialized: true,
-  resave: true
-}))
-
-//Passport
+//Passport middleware
 app.use(passport.initialize())
 app.use(passport.session())
 
-// Validator
-// app.use(expressValidator({
-//   errorFormatter: function(param, msg, value) {
-//       var namespace = param.split('.')
-//       , root    = namespace.shift()
-//       , formParam = root
+// Connect flash
+app.use(flash())
 
-//     while(namespace.length) {
-//       formParam += '[' + namespace.shift() + ']'
-//     }
-//     return {
-//       param : formParam,
-//       msg   : msg,
-//       value : value
-//     }
-//   }
-// }))
-
-app.use(require('connect-flash')())
+// Global variables
 app.use((req, res, next) => {
-  res.locals.message = require('express-message')(req, res)
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.error_msg = req.flash('error_msg')
+  res.locals.error = req.flash('error')
   next()
 })
 
-
-app.listen(3000, () => {
-    console.log('server is up and running on port 3000')
+// Routes
+app.get('/test', (req, res) => {
+  res.send('TEst')
 })
+app.use('/', require('./routes/index'))
+app.use('/users', require('./routes/users'))
+
+const PORT = process.env.PORT || 3000
+app.listen(PORT, console.log('Server connected on port: ' + PORT))

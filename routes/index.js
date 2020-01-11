@@ -1,7 +1,7 @@
 var router = require('express').Router()
 
-router.get('/', (req, res, next) => {
-    res.send('This is homepage route!!!')
+router.get('/', (req, res) => {
+    res.render('index', {title: 'Home Page'})
 })
 
 module.exports = router
