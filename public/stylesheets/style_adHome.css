@@ -1,0 +1,47 @@
+/*********************** Admin Home Page *************************/
+
+
+.mainRow {
+    margin: 0rem;
+}
+
+.yourProducts {
+    padding: 1rem 1rem;
+    float: left;
+    margin: 0rem;
+}
+
+.productRow {
+    margin: 2rem 0rem;
+}
+
+.loadMore {
+    width: 40%;
+}
+
+.loadCard {
+    background-color: transparent;
+    align-items: center;
+    border: none;
+}
+
+.addItem {
+    padding: 4rem;
+    text-align: center;
+}
+
+
+/*********************** Adding New Item Page *************************/
+
+.mainBlock{
+    background-color:whitesmoke;
+    padding: 2rem;
+}
+
+.rowClass{
+    padding: .5rem;
+}
+
+.textA{
+    margin: 0rem 1rem 0rem 1rem;
+}

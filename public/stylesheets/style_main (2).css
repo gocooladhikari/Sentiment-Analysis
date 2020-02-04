@@ -1,0 +1,113 @@
+body {
+    background-color: #d9d3f2;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.normalText {
+    color: #04032b;
+}
+
+.whiteText {
+    color: #e6e6f0;
+}
+
+ul {
+    list-style: none;
+    padding: 0px;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.hoverer:hover {
+    background-color:  transparent;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+.backBlue {
+    background-color: #04032b;
+    margin: 0px;
+}
+
+.backMain {
+    background-color: #ae9ef0;
+    margin: 0px;
+}
+
+.backTransp{
+    background-color: transparent;
+}
+
+.headerText {
+    font-size: 32px;
+    font-weight: bolder;
+}
+
+.jumboText {
+    font-size: 64px;
+    font-weight: 1000;
+}
+
+.secHeader {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.terHeader {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+
+
+
+/********** Footer Section  ****************/
+.footer{
+    background-color: #333333;
+    padding: 4rem 1rem;
+    margin: 0px;
+}
+
+.footerText {
+    color: white;
+}
+
+
+
+
+
+
+/********* Search Section *************/
+
+.search-division {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    margin: 0px;
+}
+
+.search-block {
+    width: 80%;
+    padding-right: 2rem;
+    padding-left: 1rem;
+}
+
+.search-bar {
+    width: 100%;
+    border-radius: 7.5px;
+    font-size: large; 
+}
+
+.search-button:hover {
+    background-color:  #04032b;
+    color: #007bff;
+}
+
+
+
+
