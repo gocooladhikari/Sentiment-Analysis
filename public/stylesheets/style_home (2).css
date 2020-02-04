@@ -1,0 +1,86 @@
+
+
+/**************** Main Block ************************/
+.main-block {
+    margin: 0px;
+    height: max-content;
+}
+
+
+/*********************** Stores Block *******************/
+.stores-block {
+    margin: 0px 0px 0px 32px;
+    padding-left: 10px;
+    background-color: #d9d3f2;
+}
+
+.stores-block h1.headerText {
+    padding-top: 2rem;
+    text-align: left;
+}
+
+.stores-block li {
+    margin-top: 1rem;
+    line-height: 1;
+    text-align: left;
+    text-justify: distribute;
+}
+
+
+
+/******************** Carousel Block **********************/
+
+.carousel-block {
+    padding: 1rem 0rem 0rem 0rem;
+    margin: 0px;
+}
+
+
+
+/******************** Tags Block ***********************/
+.tag-block {
+    padding: 4rem 2rem;
+    margin: 0px;
+}
+
+.tag-block li {
+    margin-top: 1rem;
+    line-height: 1;
+    text-align: right;
+    text-justify: distribute;
+}
+
+
+/************************* Introduction Block ********************/
+.introBlock {
+    background-color: transparent;
+    padding: 4rem 2rem;
+}
+
+
+
+
+
+@media (max-width: 575px) {
+
+    .mobDis {
+        display: none;
+    }
+
+    .carousel-block {
+        padding: 4px;
+    }
+
+    .search-block{
+        width: 75%;
+        margin: 0px;
+    }
+
+
+}
+
+@media(max-width: 768px){
+    .stores-block {
+        margin: 0px;
+    }
+}

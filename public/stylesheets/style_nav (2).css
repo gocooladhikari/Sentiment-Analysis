@@ -2,11 +2,21 @@
 .three-line-tog {
     color: aliceblue;
     font-size: 20px;
-    padding: 0;
+    padding: 0rem 1rem;
     margin: 0;
-    padding-left: 1rem;
-    padding-right: 1rem;
     border-style: none;
+}
+
+.sideNav {
+    padding: 2rem .5rem 2rem 2rem;
+}
+
+
+.accItems{
+    color: aliceblue;
+    padding: 0rem 1rem;
+    margin: 0;
+    text-align: right;
 }
 
 @media (min-width: 576px) {
