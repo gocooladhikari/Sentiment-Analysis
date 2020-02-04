@@ -1,11 +1,16 @@
 const express = require('express')
+const app = express()
 const router = express.Router()
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
+const bodyParser = require('body-parser')
 
 //DB model
 const User = require('../models/User')
 
+// BOdy_Paarser middleware
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
 router.get('/login', (req, res) => {
     res.render('login', {title: 'Login Portal'})
@@ -40,6 +45,7 @@ router.post('/register', (req, res) => {
 
     if(errors.length > 0){
         res.render('signin', {
+            title: 'Signin Page',
             errors,
             name,
             email,
@@ -53,6 +59,7 @@ router.post('/register', (req, res) => {
             if(user){
                  errors.push({msg: 'Email already registered'})
                 res.render('signin', {
+                    title: 'Signin Page',
                     errors,
                     name,
                     email,
@@ -82,5 +89,52 @@ router.post('/register', (req, res) => {
     }
 })
 
+router.post('/login', (req, res, next) => {
+    User.findOne({email: req.body.email}).then((user) => {
+        if(!user) {
+            res.render('login', {title: 'Login Portal',msg: 'Email is not registered'})
+        }else {
+            bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+                if(err) throw err
+                if(isMatch) {
+                    res.redirect('/users/secret')
+                }else{
+                    res.render('login', {title: 'Login Portal', msg: 'Incorrect password'})
+                }
+            })
+        }
+    })
+})
+
+// Login post route debug
+// router.post('/login', (req, res, next) => {
+//     passport.authenticate('local', (error, user, info) => {
+//         console.log(error)
+//         console.log(user)
+//         console.log(info)
+
+//         if(error) {
+//             res.status(401).send(error)
+//         }else if (!user) {
+//             res.status(401).send(info)
+//         }else{
+//             next()
+//         }
+//     })
+// }, (req, res) => {
+//     res.status(200).send('logged in')
+// })
+
+
+const ensureAuthenticated = (req, res, next) => {
+    if(req.isAuthenticated()) {
+        return next()
+    }
+    res.redirect('/users/login')
+}
+
+router.get('/secret', ensureAuthenticated, (req, res, next) => {
+    res.send('This is secret route')
+})
 
 module.exports = router

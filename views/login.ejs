@@ -1,7 +1,4 @@
-
-
-    
-        <!-- LogIn Portal -->
+    <!-- LogIn Portal -->
         <div class="container">
         <div class="row">
             <div class="col"></div>
@@ -10,13 +7,13 @@
                     <h1 class="loginHeader">Login Portal</h1>
                     <img src="pop-sm.jpg" class= "img-fluid loginImg">
                     <%- include('partials/messages') %>
-                    <form class="loginForm">
+                    <form class="loginForm" action="/users/login" method="POST">
                         <div class="form-group">
-                            <input type="email" class="form-control emailField" placeholder="Email">
+                            <input type="email" name="email" class="form-control emailField" placeholder="Email">
                         </div>
 
                         <div class="form-group">
-                            <input type="password" class="form-control emailField" placeholder="Password">
+                            <input type="password" name="password" class="form-control emailField" placeholder="Password">
                         </div>
 
                         <div class="form-check">
