@@ -31,10 +31,6 @@ router.get('/register', (req, res) => {
     res.render('signin', {title: 'Signin Portal'})
 })
 
-router.get('/admin', (req, res) => {
-    res.render('post', {title: 'Admin Post'})
-})
-
 router.post('/register', (req, res) => {
     const name = req.body.name
     const email = req.body.email
@@ -105,16 +101,21 @@ router.post('/register', (req, res) => {
 })
 
 router.post('/login', (req, res, next) => {
-    User.findOne({email: req.body.email}).then((user) => {
+    const email = req.body.email
+    const password = req.body.password
+    
+    User.findOne({email: email}).then((user) => {
         if(!user) {
-            res.render('login', {title: 'Login Portal',msg: 'Email is not registered'})
+            req.flash('error_msg', 'Email not registered')
+            res.redirect('/users/login')
         }else {
-            bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+            bcrypt.compare(password, user.password, (err, isMatch) => {
                 if(err) throw err
                 if(isMatch) {
                     res.redirect('/users/admin')
                 }else{
-                    res.render('login', {title: 'Login Portal', msg: 'Incorrect password'})
+                    req.flash('error_msg', 'Incorrect password')
+                    res.redirect('/users/login')
                 }
             })
         }
@@ -123,10 +124,14 @@ router.post('/login', (req, res, next) => {
 
 // const ensureAuthenticated = (req, res, next) => {
 //     if(req.isAuthenticated()) {
-//         return next()
+//          next()
 //     }
 //     res.redirect('/users/login')
 // }
+
+router.get('/admin', (req, res) => {
+    res.render('post', {title: 'Admin Post'})
+})
 
 router.post('/admin', (req, res) => {
     const type = req.body.type
@@ -141,7 +146,7 @@ router.post('/admin', (req, res) => {
         errors1.push({msg: 'Please fill in the required fields'})
     }
 
-    if(price < 20000) {
+    if(price < 500) {
         errors1.push({msg: 'Please check the price again'})
     }
 
@@ -157,15 +162,8 @@ router.post('/admin', (req, res) => {
 
     Post.findOne({model: model}).then(post => {
         if(post) {
-            errors1.push({msg: 'This model already exists'})
-            res.render('post', {title: 'Admin Postew',
-                errors1, 
-                type,
-                brand,
-                model,
-                price,
-                description
-            })
+            req.flash('error_msg', 'This model already exists')
+            res.redirect('/users/admin')
         }else{
             const newPost = new Post({
                 type: type,
@@ -176,7 +174,7 @@ router.post('/admin', (req, res) => {
             })
             newPost.save().then(post => {
                 req.flash('success_msg', 'Posted Successfully')
-                res.redirect('/users/login')
+                res.redirect('/users/admin')
                // console.log('success')
             }).catch(err => console.log(err))
             
