@@ -2,15 +2,15 @@ const express = require('express')
 const expressLayouts = require('express-ejs-layouts')
 const mongoose = require('mongoose')
 const MongoClient = require('mongodb').MongoClient
-const passport = require('passport')
 const bodyParser = require('body-parser')
+const passport = require('passport')
 const flash = require('connect-flash')
 const session = require('express-session')
-const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcryptjs')
 
 // DB model
 const User = require('./models/User')
+const Post = require('./models/Post')
 
 const app = express()
 
@@ -18,6 +18,7 @@ const app = express()
 mongoose.connect('mongodb://localhost:27017/userDB', {useNewUrlParser: true, useUnifiedTopology: true}).then(
   () => console.log('DB connected')
 ).catch(err => console.log(err))
+
 
 // BOdy_Paarser middleware
 app.use(bodyParser.json())
@@ -45,9 +46,9 @@ app.use(
   })
 )
 
-//Passport middleware
-app.use(passport.initialize())
-app.use(passport.session())
+// passport setup
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Global variables
 app.use((req, res, next) => {
@@ -56,28 +57,6 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error')
   next()
 })
-
-// // Passport test
-// passport.use(
-//   new LocalStrategy( ( email, password, done) => {
-//       // Check user in DB
-//       User.findOne({email: email}).then(user => {
-//           if(!user){
-//               return done(null, false, {msg: 'Email is not registered'})
-//           }else{
-//               bcrypt.compare(password, user.password, (err, isMatch) => {
-//                   if(err) console.log(err)
-//                   if(isMatch) {
-//                       return done(null, user)
-//                   }else {
-//                       return done(null, false, {msg: 'Incorrect Password'})
-//                   }
-//               })
-//           }
-          
-//       }).catch(err => console.log(err))
-//   })
-// )
 
 // Routes
 app.get('/test', (req, res) => {

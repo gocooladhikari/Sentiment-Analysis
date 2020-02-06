@@ -1,12 +1,23 @@
 const express = require('express')
 const app = express()
 const router = express.Router()
+const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const bodyParser = require('body-parser')
 
+const db = mongoose.connection
+
 //DB model
 const User = require('../models/User')
+const Post = require('../models/Post')
+// Post.create({
+//     type: 'app',
+//     brand: 'Aud',
+//     model: 'qw',
+//     price: '2000000',
+//     description: 'sssss'
+// })
 
 // BOdy_Paarser middleware
 app.use(bodyParser.urlencoded({extended: false}))
@@ -18,6 +29,10 @@ router.get('/login', (req, res) => {
 
 router.get('/register', (req, res) => {
     res.render('signin', {title: 'Signin Portal'})
+})
+
+router.get('/admin', (req, res) => {
+    res.render('post', {title: 'Admin Post'})
 })
 
 router.post('/register', (req, res) => {
@@ -97,7 +112,7 @@ router.post('/login', (req, res, next) => {
             bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
                 if(err) throw err
                 if(isMatch) {
-                    res.redirect('/users/secret')
+                    res.redirect('/users/admin')
                 }else{
                     res.render('login', {title: 'Login Portal', msg: 'Incorrect password'})
                 }
@@ -106,35 +121,67 @@ router.post('/login', (req, res, next) => {
     })
 })
 
-// Login post route debug
-// router.post('/login', (req, res, next) => {
-//     passport.authenticate('local', (error, user, info) => {
-//         console.log(error)
-//         console.log(user)
-//         console.log(info)
+// const ensureAuthenticated = (req, res, next) => {
+//     if(req.isAuthenticated()) {
+//         return next()
+//     }
+//     res.redirect('/users/login')
+// }
 
-//         if(error) {
-//             res.status(401).send(error)
-//         }else if (!user) {
-//             res.status(401).send(info)
-//         }else{
-//             next()
-//         }
-//     })
-// }, (req, res) => {
-//     res.status(200).send('logged in')
-// })
+router.post('/admin', (req, res) => {
+    const type = req.body.type
+    const brand = req.body.brand
+    const model = req.body.model
+    const price = req.body.price
+    const description = req.body.description
 
+    let errors1 = []
 
-const ensureAuthenticated = (req, res, next) => {
-    if(req.isAuthenticated()) {
-        return next()
+    if( !brand || !model || !price || !description){
+        errors1.push({msg: 'Please fill in the required fields'})
     }
-    res.redirect('/users/login')
-}
 
-router.get('/secret', ensureAuthenticated, (req, res, next) => {
-    res.send('This is secret route')
+    if(price < 20000) {
+        errors1.push({msg: 'Please check the price again'})
+    }
+
+    if(errors1.length > 0) {
+        res.render('post', {title: 'Admin Post',
+            errors1,
+            type,
+            brand,
+            price,
+            description
+        })
+    }
+
+    Post.findOne({model: model}).then(post => {
+        if(post) {
+            errors1.push({msg: 'This model already exists'})
+            res.render('post', {title: 'Admin Postew',
+                errors1, 
+                type,
+                brand,
+                model,
+                price,
+                description
+            })
+        }else{
+            const newPost = new Post({
+                type: type,
+                brand: brand,
+                model: model,
+                price: price,
+                description: description
+            })
+            newPost.save().then(post => {
+                req.flash('success_msg', 'Posted Successfully')
+                res.redirect('/users/login')
+               // console.log('success')
+            }).catch(err => console.log(err))
+            
+    }
+})
 })
 
 module.exports = router
