@@ -1,17 +1,28 @@
 const express = require('express')
 const expressLayouts = require('express-ejs-layouts')
 const mongoose = require('mongoose')
+const MongoClient = require('mongodb').MongoClient
+const bodyParser = require('body-parser')
 const passport = require('passport')
 const flash = require('connect-flash')
 const session = require('express-session')
+const bcrypt = require('bcryptjs')
 
+// DB model
+const User = require('./models/User')
+const Post = require('./models/Post')
 
 const app = express()
 
-//DB Config
-mongoose.connect('mongodb://localhost/userDB', {useNewUrlParser: true, useUnifiedTopology: true}).then(
+// //DB Config
+mongoose.connect('mongodb://localhost:27017/userDB', {useNewUrlParser: true, useUnifiedTopology: true}).then(
   () => console.log('DB connected')
 ).catch(err => console.log(err))
+
+
+// BOdy_Paarser middleware
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
 
 //Express body-parser
 app.use(express.urlencoded({extended: true}))
@@ -23,21 +34,21 @@ app.use(express.static(__dirname + '/public'))
 app.use(expressLayouts)
 app.set('view engine', 'ejs')
 
+// Connect flash
+app.use(flash())
+
 //Express sessions
 app.use(
   session({
     secret: 'secret',
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false
   })
 )
 
-//Passport middleware
-app.use(passport.initialize())
-app.use(passport.session())
-
-// Connect flash
-app.use(flash())
+// passport setup
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Global variables
 app.use((req, res, next) => {
