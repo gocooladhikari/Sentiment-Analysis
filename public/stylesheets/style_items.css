@@ -1,0 +1,29 @@
+.centre-block {
+    margin: 0 0 2rem 0;
+    background-color: white;
+
+}
+
+.info-text {
+    margin: 0px;
+    padding: 0 0 0 1rem;
+    text-align: left;
+    font-weight: lighter;
+}
+
+.review-border {
+    border: rgb(241, 229, 229);
+    border-style: double;
+}
+
+.border-mid {
+    border-right: solid;
+}
+
+@media(max-width: 576px){
+    .border-mid {
+        border-right: none;
+        margin-bottom: 8px;
+        border-bottom: solid;
+    }
+}
