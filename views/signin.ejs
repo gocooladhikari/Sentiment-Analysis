@@ -1,38 +1,38 @@
         <!-- Sign In Portal -->
         <div class="container">
             <div class="row">
-                <div class="col"></div>
-                <div class="col-8">
-                    <div class="card signInCard">
-                        <h1 class="signInHeader">Sign In Portal</h1>
+                <div class="col-sm"></div>
+                <div class="col-sm-6">
+                    <div class="card loginCard">
+                        <h1 class="p-1 m-auto">Sign In Portal</h1>
 
-                        <img src="pop-sm.jpg" class= "img-fluid signInImg">
+                        <img src="pop-sm.jpg" class= "img-fluid m-auto p-4">
                         <%- include('partials/messages') %>
-                        <form class="signInForm" action="/users/register" method="POST">
+                        <form class="m-auto" style="width: 50%;" action="/users/register" method="POST">
                             <div class="form-group">
-                                <input type="text" name="name" class="form-control entryField" placeholder="Full Name">
+                                <input type="text" name="name" class="form-control m-auto" placeholder="Full Name">
                             </div>
     
                             <div class="form-group">
-                                <input type="email" name="email" class="form-control entryField" placeholder="Email">
+                                <input type="email" name="email" class="form-control m-auto" placeholder="Email">
                             </div>
 
                             <div class="form-group">
-                                <input type="password" name="password" class="form-control entryField" placeholder="Password">
+                                <input type="password" name="password" class="form-control m-auto" placeholder="Password">
                             </div>
 
                             <div class="form-group">
-                                <input type="password" name="password2" class="form-control entryField" placeholder="Confirm Password">
+                                <input type="password" name="password2" class="form-control m-auto" placeholder="Confirm Password">
                             </div>
     
-                            <button type="submit" class="btn btn-primary submitButton">Register</button>
+                            <button type="submit" class="btn btn-primary mt-1">Register</button>
                             
-                            <p class="regOption">Already a Member?     <a href="#"> Log In</a></p>
+                            <p class="mt-1">Already a Member?     <a href="#"> Log In</a></p>
                         
                         </form>
                     </div>    
                 </div>
-                <div class="col"></div>
+                <div class="col-sm"></div>
                 
             </div>    
             </div>        
