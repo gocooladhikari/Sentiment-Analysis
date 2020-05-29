@@ -18,6 +18,14 @@ const PostSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    comments: [{
+        person: '',
+        comment: ''
+        // created_at: new Date()
+    }],
+    productImage: {
+        type: String
     }
 })
 

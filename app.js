@@ -28,6 +28,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.urlencoded({extended: true}))
 
 //PUblic directory setup
+app.use('/uploads', express.static('uploads'));
 app.use(express.static(__dirname + '/public'))
 
 //EJS
@@ -64,6 +65,8 @@ app.get('/test', (req, res) => {
 })
 app.use('/', require('./routes/index'))
 app.use('/users', require('./routes/users'))
+app.use('/post', require('./routes/post'))
+app.use('/comments', require('./routes/comments'))
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, console.log('Server connected on port: ' + PORT))

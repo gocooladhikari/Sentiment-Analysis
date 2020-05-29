@@ -1,23 +1,12 @@
 const express = require('express')
 const app = express()
 const router = express.Router()
-const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
-const passport = require('passport')
 const bodyParser = require('body-parser')
-
-const db = mongoose.connection
 
 //DB model
 const User = require('../models/User')
 const Post = require('../models/Post')
-// Post.create({
-//     type: 'app',
-//     brand: 'Aud',
-//     model: 'qw',
-//     price: '2000000',
-//     description: 'sssss'
-// })
 
 // BOdy_Paarser middleware
 app.use(bodyParser.urlencoded({extended: false}))
@@ -29,6 +18,10 @@ router.get('/login', (req, res) => {
 
 router.get('/register', (req, res) => {
     res.render('signin', {title: 'Signin Portal'})
+})
+
+router.get('/adminhome', (req, res) => {
+    res.render('adminhome', {title: 'Admin Home'})
 })
 
 router.post('/register', (req, res) => {
@@ -112,7 +105,7 @@ router.post('/login', (req, res, next) => {
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if(err) throw err
                 if(isMatch) {
-                    res.redirect('/users/admin')
+                    res.redirect('/users/adminhome')
                 }else{
                     req.flash('error_msg', 'Incorrect password')
                     res.redirect('/users/login')
@@ -122,64 +115,74 @@ router.post('/login', (req, res, next) => {
     })
 })
 
-// const ensureAuthenticated = (req, res, next) => {
-//     if(req.isAuthenticated()) {
-//          next()
+// router.get('/post', (req, res) => {
+//     res.render('post', {title: 'Admin Post'})
+// })
+
+// router.post('/post', (req, res) => {
+//     const type = req.body.type
+//     const brand = req.body.brand
+//     const model = req.body.model
+//     const price = req.body.price
+//     const description = req.body.description
+//     const comments = req.body.comments
+
+//     let errors1 = []
+
+//     if( !brand || !model || !price || !description){
+//         errors1.push({msg: 'Please fill in the required fields'})
 //     }
-//     res.redirect('/users/login')
-// }
 
-router.get('/admin', (req, res) => {
-    res.render('post', {title: 'Admin Post'})
-})
+//     if(price < 500) {
+//         errors1.push({msg: 'Please check the price again'})
+//     }
 
-router.post('/admin', (req, res) => {
-    const type = req.body.type
-    const brand = req.body.brand
-    const model = req.body.model
-    const price = req.body.price
-    const description = req.body.description
+//     if(errors1.length > 0) {
+//         res.render('post', {title: 'Admin Post',
+//             errors1,
+//             type,
+//             brand,
+//             price,
+//             description
+//         })
+//     }
 
-    let errors1 = []
-
-    if( !brand || !model || !price || !description){
-        errors1.push({msg: 'Please fill in the required fields'})
-    }
-
-    if(price < 500) {
-        errors1.push({msg: 'Please check the price again'})
-    }
-
-    if(errors1.length > 0) {
-        res.render('post', {title: 'Admin Post',
-            errors1,
-            type,
-            brand,
-            price,
-            description
-        })
-    }
-
-    Post.findOne({model: model}).then(post => {
-        if(post) {
-            req.flash('error_msg', 'This model already exists')
-            res.redirect('/users/admin')
-        }else{
-            const newPost = new Post({
-                type: type,
-                brand: brand,
-                model: model,
-                price: price,
-                description: description
-            })
-            newPost.save().then(post => {
-                req.flash('success_msg', 'Posted Successfully')
-                res.redirect('/users/admin')
-               // console.log('success')
-            }).catch(err => console.log(err))
+//     Post.findOne({model: model}).then(post => {
+//         if(post) {
+//             req.flash('error_msg', 'This model already exists')
+//             console.log('Model already exists')
+//             res.redirect('/users/post')
+//         }else{
+//             const newPost = new Post({
+//                 type: type,
+//                 brand: brand,
+//                 model: model,
+//                 price: price,
+//                 description: description,
+//                 comments: comments
+//             })
+//             newPost.save().then(post => {
+//                 req.flash('success_msg', 'Posted Successfully')
+//                 console.log('posted')
+//                 res.redirect('/users/post')
+//                 console.log(comments[0].person)
+//                // console.log('success')
+//             }).catch(err => console.log(err))
             
-    }
-})
-})
+//     }
+// })
+// })
+
+// // single item display route
+// router.route('/item/:postId').get((req, res) => {
+//     Post.findById(req.params.posstId).then(post => {
+//         if(post){
+//             console.log('Item found')
+//             console.log(post)
+//         }else{
+//             console.log('Not found')
+//         }
+//     }).catch(err => console.log(err))
+// })
 
 module.exports = router
