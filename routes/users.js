@@ -105,7 +105,8 @@ router.post('/login', (req, res, next) => {
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if(err) throw err
                 if(isMatch) {
-                    res.redirect('/users/adminhome')
+                    req.flash('success_msg', 'Logged in. You can post now')
+                    res.redirect('/post/item')
                 }else{
                     req.flash('error_msg', 'Incorrect password')
                     res.redirect('/users/login')

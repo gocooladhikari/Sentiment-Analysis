@@ -1,6 +1,6 @@
      
 
-
+<%- include('partials/messages') %>
 <!------------------------------------ Search Block -------------------------------->
 
         <div class="row search-division">
@@ -59,25 +59,27 @@
                       <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
                       <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
                     </ol>
+                    
                     <div class="carousel-inner">
                       <div class="carousel-item active">
-                        <img src="pop-md2.jpg" class="d-block w-100">
+                        <img src="../uploads/159162015296907HPeWIWxAIHZ7CDJGcn6uO-4..v_1578361612.jpg" class="d-block w-100">
                         <div class="carousel-caption d-none d-md-block">
-                            <h5>First slide label</h5>
+                            <h5><%= posts[0].name %></h5>
+                            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                        </div>
+                      </div>
+
+                      <div class="carousel-item">
+                        <img src="../uploads/159162140584707HPeWIWxAIHZ7CDJGcn6uO-4..v_1578361612.jpg" class="d-block w-100">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5><%= posts[1].name %></h5>
                             <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
                         </div>
                       </div>
                       <div class="carousel-item">
-                        <img src="pop-md2.jpg" class="d-block w-100">
+                        <img src="../uploads/1591621585331ahevYTh9pWRzkNPF85MQhb.jpg" class="d-block w-100">
                         <div class="carousel-caption d-none d-md-block">
-                            <h5>Second slide label</h5>
-                            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                        </div>
-                      </div>
-                      <div class="carousel-item">
-                        <img src="pop-md2.jpg" class="d-block w-100">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>Third slide label</h5>
+                            <h5><%= posts[2].name %></h5>
                             <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
                         </div>
                       </div>

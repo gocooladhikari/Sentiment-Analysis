@@ -28,12 +28,16 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.urlencoded({extended: true}))
 
 //PUblic directory setup
-app.use('/uploads', express.static('uploads'));
 app.use(express.static(__dirname + '/public'))
+app.use( express.static('./public/images'))
+app.use('/uploads', express.static('./uploads'))
 
 //EJS
 app.use(expressLayouts)
 app.set('view engine', 'ejs')
+
+
+app.use('/uploads', express.static('uploads'));
 
 // Connect flash
 app.use(flash())
@@ -61,7 +65,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.get('/test', (req, res) => {
-  res.send('TEst')
+  res.render('verification', {title: 'Email Verification'})
 })
 app.use('/', require('./routes/index'))
 app.use('/users', require('./routes/users'))

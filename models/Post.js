@@ -8,7 +8,7 @@ const PostSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    model: {
+    name: {
         type: String
     },
     price: {
@@ -16,8 +16,7 @@ const PostSchema = new mongoose.Schema({
         required: true
     },
     description: {
-        type: String,
-        required: true
+        type: String
     },
     comments: [{
         person: '',
@@ -25,6 +24,9 @@ const PostSchema = new mongoose.Schema({
         // created_at: new Date()
     }],
     productImage: {
+        type: String
+    },
+    sort: {
         type: String
     }
 })

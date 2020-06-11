@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 const router = express.Router()
+const mongoose = require('mongoose')
+var ObjectId = require('mongodb').ObjectId
 const multer = require('multer')
 const bodyParser = require('body-parser')
 
@@ -26,7 +28,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize:1024 * 1024 * 20
+        fileSize: 1024 * 1024 * 20
     },
     fileFilter: fileFilter
 })
@@ -38,19 +40,20 @@ router.get('/item', (req, res) => {
     res.render('post', {title: 'Admin Post'})
 })
 
-router.post('/item', upload.single('productImage'), (req, res) => {
+router.post('/item', upload.single('productImage'), (req, res, next) => {
     console.log(req.file)
     const type = req.body.type
     const brand = req.body.brand
-    const model = req.body.model
+    const name = req.body.name
     const price = req.body.price
     const description = req.body.description
-    // const productImage = req.file.path
+    const productImage = req.file.filename
     const comments = req.body.comments
+    var sort
 
     let errors1 = []
 
-    if( !brand || !model || !price || !description){
+    if( !brand || !name || !price ){
         errors1.push({msg: 'Please fill in the required fields'})
     }
 
@@ -68,44 +71,98 @@ router.post('/item', upload.single('productImage'), (req, res) => {
         })
     }
 
-    Post.findOne({model: model}).then(post => {
+    Post.find().then(posts => {
+        if(!posts){
+           console.log('Empty Database')
+           sort = 0
+        }else{
+            // console.log(posts.length)
+            sort = posts.length
+            console.log(sort)
+        }
+        
+    }).catch(err => console.log(err))
+
+
+
+    Post.findOne({name: 'hello'}).then(post => {
         if(post) {
-            req.flash('error_msg', 'This model already exists')
-            console.log('Model already exists')
+            req.flash('error_msg', 'This name already exists')
+            console.log('name already exists')
             res.redirect('/')
         }else{
             const newPost = new Post({
                 type: type,
                 brand: brand,
-                model: model,
+                name: name,
                 price: price,
                 description: description,
-                // productImage: productImage,
-                comments: comments
+                productImage: productImage,
+                comments: comments,
+                sort: sort + 1
+
             })
             newPost.save().then(post => {
-                req.flash('success_msg', 'Posted Successfully')
-                console.log('posted')
-                res.redirect('/')
-                // console.log(comments[0].person)
-               // console.log('success')
-            }).catch(err => console.log(err))
+                if(!post){
+                   return console.log('Error somewhere')
+                }
+
+                // console.log(post.time)
+                req.flash('success_msg', 'Posted Successfully!!!')
+                res.redirect('/post/display')
+                console.log(post.sort)
+                // res.alert('Posted Successfully')
+                
+            })
             
     }
+}).catch(err => console.log(err))
 })
+
+// Display all posts
+router.route('/display').get((req, res, next) => {
+    // res.render('items', {title: 'Single Post'})
+    var sort = {sort: -1}
+    Post.find().sort(sort).then(posts => {
+        if(!posts){
+            return console.log(err)
+        }
+        res.render('adminhome', {title: 'Display All', items: posts})
+        next()
+    }).catch(err => console.log(err))
 })
 
 // single item display route
-router.route('/item/:postId').get((req, res) => {
-    Post.findById(req.params.postId).then(post => {
-        if(post){
-            console.log('Item found')
-            console.log(post)
-            res.json(post)
-        }else{
-            console.log('Not found')
-        }
-    }).catch(err => console.log(err))
+// res.render('items', {
+//     title: 'Single Post'
+//     // name: post.name,
+//     // type: post.type,
+//     // image: post.productImage,
+//     // price: post.price
+// })
+
+router.get('/display/:postId', (req, res) => {
+    const id = req.params.postId
+    if(mongoose.Types.ObjectId.isValid(id)){
+        Post.findOne({_id: new ObjectId(id)}).then(post => {
+            if(post){
+                console.log(post)
+                console.log('Data aayo')
+                
+                res.render('items', {
+                title: 'Single Post',
+                name: post.name,
+                type: post.type,
+                image: post.productImage,
+                price: post.price
+            })
+            }else{
+                console.log('No data')
+            }
+        }).catch(err => console.log(err))
+    }else{
+        console.log('provide correct id')
+    }
 })
 
 // Adding comment route
@@ -133,16 +190,5 @@ router.route('/single/:postId').post((req, res) => {
     }).catch(err => console.log(err))
 })
 
-
-// Display all posts
-router.route('/showall').get((req, res) => {
-    Post.find().then(post => {
-        if(!post){
-            console.log('nothing to show')
-        }else{
-            res.json(post)
-        }
-    }).catch(err => console.log(err))
-})
 
 module.exports = router
